@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 
 class RandomForestModel(BaseModel):
-    """Methods for training a decision tree model."""
+    """Methods for training a Random Forest model."""
 
     def fit_and_train(self, X_train, X_val, y_train):
         rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
