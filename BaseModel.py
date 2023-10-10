@@ -83,7 +83,8 @@ class BaseModel(object):
         print(correlations)
 
     def bin_pitch_columns(self) -> None:
-        """Cluster pitches by type."""
+        """Cluster pitches by type. Meant to be used for exploratory
+        analysis to improve interpretability of pitching data."""
         pitching_columns = [p for p in self.train.columns if p.startswith('p_')]
         train_pitching = self.train[pitching_columns]
 
@@ -120,9 +121,10 @@ class BaseModel(object):
             2: "Curveball",
             3: "Changeup/Two_seam",
         }
-        # Update dataset with new column
-        self.train['pitch_type_k4'] = labels_4
-        self.train['pitch_type_k4'] = self.train['pitch_type_k4'].map(pitch_labels_k4)
+        # Evaluate outputs but don't apply new column to train dataset
+        trian_data = self.train.copy()
+        trian_data['pitch_type_k4'] = labels_4
+        trian_data['pitch_type_k4'] = trian_data['pitch_type_k4'].map(pitch_labels_k4)
 
     def split_train(
             self
@@ -144,3 +146,7 @@ class BaseModel(object):
         class_report = classification_report(y_val, y_pred)
 
         print(f"Accuracy: {accuracy}\nClass report:\n{class_report}")
+    
+    def output_test_with_prob(self):
+        "Output test dataset with new probability."
+        self.test.to_csv("new_test.csv", index=False)
